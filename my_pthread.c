@@ -28,7 +28,8 @@ void timer_handler(int);
 void disableTime(void);
 
 void timer_handler(int sigint){
-  //printf("hit\n");
+  printf("hit\n");
+  //sleep(1);
   //exit(0);
   schedule(-1);
 }
@@ -44,7 +45,10 @@ void schedule(int signum){
   timer.it_value.tv_sec = 0;
   timer.it_interval.tv_sec = 0;
   timer.it_interval.tv_usec = 0;
-  if (signum == -2){ //initial setup
+  if(signum == -3){
+    signal(SIGPROF, timer_handler);
+  }
+  else if (signum == -2){ //initial setup
     signal(SIGPROF, timer_handler);
     int errnum = setitimer(ITIMER_PROF, &timer, NULL);
     if (errnum == -1) {
@@ -128,7 +132,7 @@ void my_pthread_create(my_pthread_t *thread, void*(*function)(void*), void *arg)
   tail = tail->next;
 
 
-  schedule(-1);
+  schedule(-3);
 
   tid++;
 
@@ -154,6 +158,7 @@ void my_pthread_yield(){
  */
 void my_pthread_join(my_pthread_t thread){
 
+  disableTime();
   //check if joined thread is alive
   if (tList[thread].status != RUNNABLE)
     return;
