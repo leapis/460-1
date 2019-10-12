@@ -28,7 +28,7 @@ void timer_handler(int);
 void disableTime(void);
 
 void timer_handler(int sigint){
-  printf("hit\n");
+  //printf("hit\n");
   //sleep(1);
   //exit(0);
   schedule(-1);
@@ -39,7 +39,7 @@ void timer_handler(int sigint){
  * Pick the next runnable thread and swap contexts to start executing
  */
 void schedule(int signum){
-  disableTime();
+  //disableTime();
   struct itimerval timer;
   timer.it_value.tv_usec = TIME_QUANTUM_MS;
   timer.it_value.tv_sec = 0;
@@ -109,7 +109,7 @@ void my_pthread_create(my_pthread_t *thread, void*(*function)(void*), void *arg)
     head = tail;
     current = tail;
     tid++;
-    //schedule(-2);
+    schedule(-2);
 
   } 
 
